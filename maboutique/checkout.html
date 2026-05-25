@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commande - MaBoutique</title>
+  <meta name="description" content="Finalisez votre commande en toute sécurité.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="/" class="logo">MaBoutique</a>
+      
+      <nav class="nav-desktop">
+        <a href="/" data-i18n="nav.home"></a>
+        <a href="shop.html" data-i18n="nav.shop"></a>
+        <a href="about.html" data-i18n="nav.about"></a>
+        <a href="contact.html" data-i18n="nav.contact"></a>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="lang-selector">
+          <button class="lang-btn active" onclick="setLanguage('fr')">FR</button>
+          <button class="lang-btn" onclick="setLanguage('ar')">ع</button>
+          <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+        </div>
+        
+        <button class="cart-toggle" title="Panier">
+          🛒
+          <span class="cart-badge" style="display: none;">0</span>
+        </button>
+        
+        <button class="menu-toggle" onclick="document.querySelector('.mobile-menu').classList.toggle('active')">☰</button>
+      </div>
+    </div>
+    
+    <nav class="mobile-menu">
+      <a href="/" data-i18n="nav.home"></a>
+      <a href="shop.html" data-i18n="nav.shop"></a>
+      <a href="about.html" data-i18n="nav.about"></a>
+      <a href="contact.html" data-i18n="nav.contact"></a>
+    </nav>
+  </header>
+
+  <!-- Checkout -->
+  <div class="checkout-container">
+    <!-- Formulaire -->
+    <form class="checkout-form" onsubmit="handleCheckout(event)">
+      <!-- Facturation -->
+      <div class="form-section">
+        <h3 data-i18n="checkout.billing"></h3>
+        
+        <div class="form-row">
+          <input type="text" name="name" placeholder="Nom complet" data-i18n-placeholder="checkout.name" required>
+          <input type="email" name="email" placeholder="Email" data-i18n-placeholder="checkout.email" required>
+        </div>
+        
+        <input type="tel" name="phone" placeholder="Téléphone" data-i18n-placeholder="checkout.phone" required>
+      </div>
+
+      <!-- Livraison -->
+      <div class="form-section">
+        <h3 data-i18n="checkout.shipping"></h3>
+        
+        <input type="text" name="address" placeholder="Adresse" data-i18n-placeholder="checkout.address" required>
+        
+        <div class="form-row">
+          <select name="wilaya" required>
+            <option value="">-- Sélectionnez une wilaya --</option>
+            <option>Adrar</option>
+            <option>Chlef</option>
+            <option>Laghouat</option>
+            <option>Oum El Bouaghi</option>
+            <option>Batna</option>
+            <option>Béjaïa</option>
+            <option>Biskra</option>
+            <option>Béchar</option>
+            <option>Blida</option>
+            <option>Bouira</option>
+            <option>Tamanrasset</option>
+            <option>Tébessa</option>
+            <option>Tlemcen</option>
+            <option>Tiaret</option>
+            <option>Tizi Ouzou</option>
+            <option>Alger</option>
+            <option>Djelfa</option>
+            <option>Jijel</option>
+            <option>Sétif</option>
+            <option>Saïda</option>
+            <option>Skikda</option>
+            <option>Sidi Bel Abbès</option>
+            <option>Annaba</option>
+            <option>Guelma</option>
+            <option>Constantine</option>
+            <option>Médéa</option>
+            <option>Mostaghanem</option>
+            <option>M'Sila</option>
+            <option>Mascara</option>
+            <option>Ouargla</option>
+            <option>Oran</option>
+            <option>El Bayadh</option>
+            <option>El Oued</option>
+            <option>Khenchela</option>
+            <option>Souk Ahras</option>
+            <option>Tipaza</option>
+            <option>Mila</option>
+            <option>Aïn Defla</option>
+            <option>Naama</option>
+            <option>Aïn Témouchent</option>
+            <option>Ghardaïa</option>
+            <option>Relizane</option>
+            <option>Draa Ben Stita</option>
+            <option>Beni Abbas</option>
+            <option>In Salah</option>
+            <option>In Guezzam</option>
+            <option>Touggourt</option>
+            <option>Djanet</option>
+          </select>
+          <input type="text" name="city" placeholder="Ville" data-i18n-placeholder="checkout.city" required>
+        </div>
+        
+        <textarea name="notes" placeholder="Notes (optionnel)" data-i18n-placeholder="checkout.notes"></textarea>
+      </div>
+
+      <!-- Code promo -->
+      <div class="form-section">
+        <h3 style="margin-top: 0;" data-i18n="checkout.promo_code"></h3>
+        
+        <div style="display: flex; gap: var(--spacing-md);">
+          <input type="text" name="promo_code" placeholder="Ex: BIENVENUE10" style="flex: 1;">
+          <button type="button" class="btn btn-apply-promo" style="flex: 0 0 auto;" data-i18n="checkout.apply"></button>
+        </div>
+      </div>
+
+      <!-- Paiement -->
+      <div class="form-section">
+        <h3 data-i18n="checkout.payment"></h3>
+        
+        <div class="accordion">
+          <!-- Stripe -->
+          <div class="accordion-item">
+            <label class="accordion-header">
+              <input type="radio" name="payment" value="stripe" checked>
+              <span data-i18n="checkout.payment_stripe"></span>
+            </label>
+            <div class="accordion-content">
+              <p>Vous serez redirigé vers Stripe pour effectuer le paiement de manière sécurisée.</p>
+            </div>
+          </div>
+          
+          <!-- Virement -->
+          <div class="accordion-item">
+            <label class="accordion-header">
+              <input type="radio" name="payment" value="transfer">
+              <span data-i18n="checkout.payment_transfer"></span>
+            </label>
+            <div class="accordion-content">
+              <p><strong>Coordonnées bancaires :</strong></p>
+              <p>Compte: 12345678901234<br>RIB: XXXXX XXXXX XXXXX<br>CCP: XXXXX XXXXX XXXXX</p>
+              <p style="color: var(--text-muted); font-size: 0.9rem;">Merci d'ajouter le numéro de commande dans la référence du virement.</p>
+            </div>
+          </div>
+          
+          <!-- Paiement à la livraison -->
+          <div class="accordion-item">
+            <label class="accordion-header">
+              <input type="radio" name="payment" value="delivery">
+              <span data-i18n="checkout.payment_delivery"></span>
+            </label>
+            <div class="accordion-content">
+              <p>Payez directement à la réception de votre commande. Le livreur accepte les espèces.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton confirm -->
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;" data-i18n="checkout.confirm"></button>
+    </form>
+
+    <!-- Récapitulatif -->
+    <aside class="order-summary"></aside>
+  </div>
+
+  <!-- Modal succès -->
+  <div id="success-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 data-i18n="checkout.success"></h2>
+      </div>
+      <div class="modal-body">
+        <p style="text-align: center; font-size: 2rem; margin: 1rem 0;">✓</p>
+        <p id="order-message" style="text-align: center;">Votre commande a été confirmée. Vous recevrez un email de confirmation dans quelques instants.</p>
+        <p id="order-id" style="text-align: center; color: var(--gold); font-weight: bold;"></p>
+      </div>
+      <div class="modal-footer">
+        <a href="shop.html" class="btn btn-primary">Continuer vos achats</a>
+        <a href="/" class="btn">Retour à l'accueil</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3 data-i18n="nav.shop"></h3>
+        <ul>
+          <li><a href="shop.html" data-i18n="nav.shop"></a></li>
+          <li><a href="about.html" data-i18n="nav.about"></a></li>
+          <li><a href="contact.html" data-i18n="nav.contact"></a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Légal</h3>
+        <ul>
+          <li><a href="#">Conditions d'utilisation</a></li>
+          <li><a href="#">Politique de confidentialité</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Suivez-nous</h3>
+        <ul>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Instagram</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Newsletter</h3>
+        <input type="email" placeholder="Votre email..." style="width: 100%; margin-bottom: 1rem;">
+        <button class="btn btn-primary" style="width: 100%;">S'abonner</button>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MaBoutique. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/chatbot.js"></script>
+  
+  <script>
+    function handleCheckout(event) {
+      event.preventDefault();
+      
+      const cart = getCart();
+      if (cart.length === 0) {
+        showToast('Votre panier est vide', 'error');
+        return;
+      }
+      
+      const formData = {
+        name: document.querySelector('input[name="name"]').value,
+        email: document.querySelector('input[name="email"]').value,
+        phone: document.querySelector('input[name="phone"]').value,
+        address: document.querySelector('input[name="address"]').value,
+        wilaya: document.querySelector('select[name="wilaya"]').value,
+        city: document.querySelector('input[name="city"]').value,
+        notes: document.querySelector('textarea[name="notes"]').value,
+        payment: document.querySelector('input[name="payment"]:checked').value,
+        items: cart,
+        total: getCartTotal(),
+        totalDZD: convertToDZD(getCartTotal())
+      };
+      
+      const paymentMethod = formData.payment;
+      
+      if (paymentMethod === 'stripe') {
+        // Redirection vers Stripe Payment Link (à personnaliser)
+        const stripeLink = localStorage.getItem('stripe_link') || 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+        
+        // Sauvegarder la commande
+        const order = saveOrder(formData);
+        
+        // Redirection
+        setTimeout(() => {
+          window.location.href = stripeLink;
+        }, 1000);
+      } else if (paymentMethod === 'transfer' || paymentMethod === 'delivery') {
+        // Envoi Formspree
+        const formspreeId = localStorage.getItem('formspree_id') || 'VOTRE_ID_FORMSPREE';
+        const formspreeURL = `https://formspree.io/f/${formspreeId}`;
+        
+        const emailContent = `
+Nouvelle Commande MaBoutique
+─────────────────────────
+Client: ${formData.name}
+Email: ${formData.email}
+Téléphone: ${formData.phone}
+Adresse: ${formData.address}, ${formData.city}, ${formData.wilaya}
+
+Produits:
+${cart.map(item => `- ${item.name[currentLang] || item.name.fr} × ${item.qty} = ${formatPrice(item.price * item.qty)}`).join('\n')}
+
+Total: ${formatPrice(formData.total)}
+Mode de paiement: ${paymentMethod === 'transfer' ? 'Virement bancaire' : 'Paiement à la livraison'}
+Notes: ${formData.notes || 'Aucune'}
+────────────────────────
+        `;
+        
+        // Sauvegarder la commande
+        const order = saveOrder(formData);
+        
+        // Envoyer email via Formspree
+        fetch(formspreeURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            _subject: `Commande MaBoutique #${order.id}`,
+            _replyto: formData.email,
+            message: emailContent
+          })
+        }).then(() => {
+          // Afficher le modal de succès
+          const modal = document.getElementById('success-modal');
+          document.getElementById('order-id').textContent = `Numéro de commande: ${order.id}`;
+          modal.classList.add('active');
+          
+          // Vider le panier
+          clearCart();
+        }).catch(err => {
+          showToast('Erreur lors de l\'envoi de la commande', 'error');
+          console.error(err);
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCart();
+      updateCartCount();
+      
+      // Si panier vide, rediriger
+      if (getCart().length === 0) {
+        document.querySelector('.checkout-form').style.display = 'none';
+        document.querySelector('.order-summary').style.display = 'none';
+        document.body.innerHTML += '<div style="text-align: center; padding: 4rem 2rem;"><h2>Votre panier est vide</h2><p><a href="shop.html" class="btn btn-primary">Retour à la boutique</a></p></div>';
+      }
+    });
+  </script>
+</body>
+</html>

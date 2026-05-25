@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique - MaBoutique</title>
+  <meta name="description" content="Parcourez notre sélection complète de produits artisanaux traditionnels.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="/" class="logo">MaBoutique</a>
+      
+      <nav class="nav-desktop">
+        <a href="/" data-i18n="nav.home"></a>
+        <a href="shop.html" data-i18n="nav.shop"></a>
+        <a href="about.html" data-i18n="nav.about"></a>
+        <a href="contact.html" data-i18n="nav.contact"></a>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="lang-selector">
+          <button class="lang-btn active" onclick="setLanguage('fr')">FR</button>
+          <button class="lang-btn" onclick="setLanguage('ar')">ع</button>
+          <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+        </div>
+        
+        <button class="cart-toggle" title="Panier">
+          🛒
+          <span class="cart-badge" style="display: none;">0</span>
+        </button>
+        
+        <button class="menu-toggle" onclick="document.querySelector('.mobile-menu').classList.toggle('active')">☰</button>
+      </div>
+    </div>
+    
+    <nav class="mobile-menu">
+      <a href="/" data-i18n="nav.home"></a>
+      <a href="shop.html" data-i18n="nav.shop"></a>
+      <a href="about.html" data-i18n="nav.about"></a>
+      <a href="contact.html" data-i18n="nav.contact"></a>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <div style="max-width: 1400px; margin: 0 auto; padding: var(--spacing-2xl, 4rem) var(--spacing-lg, 2rem);">
+    <h1 style="margin-bottom: var(--spacing-2xl, 4rem);" data-i18n="shop.title"></h1>
+    
+    <div class="shop-container">
+      <!-- Sidebar filtres -->
+      <aside class="shop-sidebar">
+        <div class="filter-section">
+          <h3 data-i18n="shop.search"></h3>
+          <input type="text" class="filter-search" data-i18n-placeholder="shop.search" data-search>
+        </div>
+
+        <div class="filter-section">
+          <h3 data-i18n="shop.category"></h3>
+          <div id="categories-list"></div>
+        </div>
+
+        <div class="filter-section">
+          <h3 data-i18n="shop.price"></h3>
+          <div class="price-range">
+            <input type="range" name="price" min="0" max="500" value="500" step="10">
+            <span class="price-value">500€</span>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h3 data-i18n="shop.sort"></h3>
+          <select name="sort">
+            <option value="default" data-i18n="shop.sort_default"></option>
+            <option value="price_asc" data-i18n="shop.sort_price_asc"></option>
+            <option value="price_desc" data-i18n="shop.sort_price_desc"></option>
+            <option value="new" data-i18n="shop.sort_new"></option>
+            <option value="promo" data-i18n="shop.sort_promo"></option>
+          </select>
+        </div>
+      </aside>
+
+      <!-- Grille produits -->
+      <main>
+        <div style="margin-bottom: var(--spacing-lg, 2rem); color: var(--text-muted); font-size: 0.95rem;" data-results-count>0 produits</div>
+        <div class="products-grid"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Panier sidebar -->
+  <div class="cart-overlay" onclick="closeCartSidebar()"></div>
+  <aside class="cart-sidebar">
+    <div class="cart-header">
+      <h2 data-i18n="cart.title"></h2>
+      <button class="cart-close">✕</button>
+    </div>
+    
+    <div class="cart-items"></div>
+    
+    <div class="cart-footer">
+      <div class="order-summary"></div>
+      <div class="cart-actions">
+        <a href="checkout.html" class="btn btn-primary" style="width: 100%;" data-i18n="cart.checkout"></a>
+        <button class="btn" style="width: 100%;" onclick="closeCartSidebar()" data-i18n="cart.continue"></button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Footer -->
+  <footer style="margin-top: var(--spacing-2xl, 4rem);">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3 data-i18n="nav.shop"></h3>
+        <ul>
+          <li><a href="shop.html" data-i18n="nav.shop"></a></li>
+          <li><a href="about.html" data-i18n="nav.about"></a></li>
+          <li><a href="contact.html" data-i18n="nav.contact"></a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Légal</h3>
+        <ul>
+          <li><a href="#">Conditions d'utilisation</a></li>
+          <li><a href="#">Politique de confidentialité</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Suivez-nous</h3>
+        <ul>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Instagram</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Newsletter</h3>
+        <input type="email" placeholder="Votre email..." style="width: 100%; margin-bottom: 1rem;">
+        <button class="btn btn-primary" style="width: 100%;">S'abonner</button>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 MaBoutique. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  <!-- Chatbot -->
+  <button class="chatbot-toggle">💬</button>
+  <div class="chatbot-window">
+    <div class="chatbot-header">
+      <h3 data-i18n="chat.title"></h3>
+      <button class="chatbot-close">✕</button>
+    </div>
+    <div class="chatbot-messages"></div>
+    <div class="chatbot-input">
+      <input type="text" placeholder="Votre question..." data-i18n-placeholder="chat.placeholder">
+      <button data-i18n="chat.send"></button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/chatbot.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Remplir les catégories
+      const categoriesList = document.getElementById('categories-list');
+      const categories = getCategories();
+      
+      const allCategoryLabel = document.createElement('label');
+      allCategoryLabel.className = 'filter-option';
+      allCategoryLabel.innerHTML = `<input type="radio" name="category" value="" checked> Tous`;
+      categoriesList.appendChild(allCategoryLabel);
+      
+      categories.forEach(cat => {
+        const label = document.createElement('label');
+        label.className = 'filter-option';
+        label.innerHTML = `<input type="radio" name="category" value="${cat}"> ${cat}`;
+        categoriesList.appendChild(label);
+      });
+      
+      // Événement changement catégorie
+      categoriesList.querySelectorAll('input[name="category"]').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const filters = {
+            category: e.target.value || null,
+            search: document.querySelector('input[data-search]').value,
+            maxPrice: parseInt(document.querySelector('input[name="price"]').value),
+            sort: document.querySelector('select[name="sort"]').value
+          };
+          renderProducts(filters);
+        });
+      });
+      
+      // Événement prix
+      document.querySelector('input[name="price"]').addEventListener('input', (e) => {
+        document.querySelector('.price-value').textContent = e.target.value + '€';
+        const filters = {
+          maxPrice: parseInt(e.target.value),
+          search: document.querySelector('input[data-search]').value,
+          sort: document.querySelector('select[name="sort"]').value
+        };
+        renderProducts(filters);
+      });
+      
+      // Événement tri
+      document.querySelector('select[name="sort"]').addEventListener('change', (e) => {
+        const filters = {
+          sort: e.target.value,
+          search: document.querySelector('input[data-search]').value,
+          maxPrice: parseInt(document.querySelector('input[name="price"]').value)
+        };
+        renderProducts(filters);
+      });
+      
+      // Événement recherche (délai 300ms)
+      let searchTimeout;
+      document.querySelector('input[data-search]').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          const filters = {
+            search: e.target.value,
+            sort: document.querySelector('select[name="sort"]').value,
+            maxPrice: parseInt(document.querySelector('input[name="price"]').value)
+          };
+          renderProducts(filters);
+        }, 300);
+      });
+      
+      // Rendu initial
+      renderProducts();
+      renderCart();
+    });
+  </script>
+</body>
+</html>
