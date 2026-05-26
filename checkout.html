@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commande — MaBoutique</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Ma<span>Boutique</span></a>
+    <div class="header-actions">
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="ar">ع</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="index.html" class="btn btn-outline btn-sm">← Continuer mes achats</a>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="section-header" style="margin-bottom:2rem">
+      <div class="section-label">✦ Finaliser</div>
+      <h2 class="section-title" data-i18n="btn_checkout">Passer la commande</h2>
+    </div>
+
+    <div class="checkout-grid">
+      <!-- LEFT: Form -->
+      <div>
+        <!-- Contact Info -->
+        <div class="checkout-section">
+          <h3 class="checkout-section-title" data-i18n="checkout_info">Informations</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" data-i18n="label_name">Nom complet</label>
+              <input type="text" id="f-name" class="form-input" placeholder="Votre nom">
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="label_phone">Téléphone</label>
+              <input type="tel" id="f-phone" class="form-input" placeholder="+213 XX XX XX XX">
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label" data-i18n="label_email">Email</label>
+              <input type="email" id="f-email" class="form-input" placeholder="votre@email.com">
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label" data-i18n="label_address">Adresse</label>
+              <input type="text" id="f-address" class="form-input" placeholder="Rue, N°...">
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="label_wilaya">Wilaya</label>
+              <select id="f-wilaya" class="form-select">
+                <option value="">Sélectionner...</option>
+                <option>01 - Adrar</option><option>02 - Chlef</option><option>03 - Laghouat</option>
+                <option>04 - Oum El Bouaghi</option><option>05 - Batna</option><option>06 - Béjaïa</option>
+                <option>07 - Biskra</option><option>08 - Béchar</option><option>09 - Blida</option>
+                <option>10 - Bouira</option><option>11 - Tamanrasset</option><option>12 - Tébessa</option>
+                <option>13 - Tlemcen</option><option>14 - Tiaret</option><option>15 - Tizi Ouzou</option>
+                <option>16 - Alger</option><option>17 - Djelfa</option><option>18 - Jijel</option>
+                <option>19 - Sétif</option><option>20 - Saïda</option><option>21 - Skikda</option>
+                <option>22 - Sidi Bel Abbès</option><option>23 - Annaba</option><option>24 - Guelma</option>
+                <option>25 - Constantine</option><option>26 - Médéa</option><option>27 - Mostaganem</option>
+                <option>28 - M'Sila</option><option>29 - Mascara</option><option>30 - Ouargla</option>
+                <option>31 - Oran</option><option>32 - El Bayadh</option><option>33 - Illizi</option>
+                <option>34 - Bordj Bou Arréridj</option><option>35 - Boumerdès</option>
+                <option>36 - El Tarf</option><option>37 - Tindouf</option><option>38 - Tissemsilt</option>
+                <option>39 - El Oued</option><option>40 - Khenchela</option><option>41 - Souk Ahras</option>
+                <option>42 - Tipaza</option><option>43 - Mila</option><option>44 - Aïn Defla</option>
+                <option>45 - Naâma</option><option>46 - Aïn Témouchent</option><option>47 - Ghardaïa</option>
+                <option>48 - Relizane</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="label_city">Ville</label>
+              <input type="text" id="f-city" class="form-input" placeholder="Votre ville">
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label" data-i18n="label_notes">Notes</label>
+              <textarea id="f-notes" class="form-input" rows="2" placeholder="Instructions spéciales..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promo Code -->
+        <div class="checkout-section">
+          <h3 class="checkout-section-title">Code promo</h3>
+          <div style="display:flex;gap:0.75rem">
+            <input type="text" id="promo-input" class="form-input" placeholder="BIENVENUE10" style="flex:1;text-transform:uppercase">
+            <button class="btn btn-outline" onclick="applyPromo()">Appliquer</button>
+          </div>
+          <div id="promo-msg" style="font-size:0.8rem;margin-top:0.5rem"></div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="checkout-section">
+          <h3 class="checkout-section-title" data-i18n="checkout_payment">Paiement</h3>
+          <div class="payment-methods">
+
+            <!-- Stripe -->
+            <label class="payment-method" onclick="selectPayment('stripe')">
+              <input type="radio" name="payment" value="stripe">
+              <div class="payment-method-header">
+                <span class="payment-icon">💳</span>
+                <div>
+                  <div class="payment-name" data-i18n="pay_stripe">Paiement sécurisé en ligne</div>
+                  <div class="payment-desc" data-i18n="pay_stripe_desc">Visa, Mastercard — en euros</div>
+                </div>
+              </div>
+              <div class="payment-detail">
+                <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem">🔒 Vous serez redirigé vers la page de paiement sécurisée Stripe. Paiement chiffré SSL.</p>
+                <button class="btn btn-primary btn-full" onclick="payStripe()">
+                  🔒 Payer en ligne (€)
+                </button>
+              </div>
+            </label>
+
+            <!-- Virement DZD -->
+            <label class="payment-method" onclick="selectPayment('virement')">
+              <input type="radio" name="payment" value="virement">
+              <div class="payment-method-header">
+                <span class="payment-icon">🏦</span>
+                <div>
+                  <div class="payment-name" data-i18n="pay_virement">Virement bancaire / CCP</div>
+                  <div class="payment-desc" data-i18n="pay_virement_desc">Paiement en dinars algériens</div>
+                </div>
+              </div>
+              <div class="payment-detail">
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1rem;margin-bottom:1rem;font-size:0.85rem">
+                  <div style="margin-bottom:0.5rem;font-weight:500;color:var(--gold)">Coordonnées bancaires</div>
+                  <div>Compte CCP : <strong>XXXXX XXXXX XX</strong></div>
+                  <div>Nom : <strong>Votre Nom / Boutique</strong></div>
+                  <div>Clé RIB : <strong>XX</strong></div>
+                  <div style="margin-top:0.5rem;color:var(--text-muted);font-size:0.78rem">Envoyez une capture du virement à contact@maboutique.dz</div>
+                </div>
+                <button class="btn btn-primary btn-full" onclick="submitDZD('virement')">Confirmer la commande (DA)</button>
+              </div>
+            </label>
+
+            <!-- Cash on Delivery -->
+            <label class="payment-method" onclick="selectPayment('livraison')">
+              <input type="radio" name="payment" value="livraison">
+              <div class="payment-method-header">
+                <span class="payment-icon">💵</span>
+                <div>
+                  <div class="payment-name" data-i18n="pay_livraison">Paiement à la livraison</div>
+                  <div class="payment-desc" data-i18n="pay_livraison_desc">Payez en cash à la réception</div>
+                </div>
+              </div>
+              <div class="payment-detail">
+                <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem">📦 Un livreur vous contactera pour confirmer la date et l'heure de livraison.</p>
+                <button class="btn btn-primary btn-full" onclick="submitDZD('livraison')">Confirmer la commande</button>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Order Summary -->
+      <div class="order-summary">
+        <div class="summary-card">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border)">Récapitulatif</h3>
+          <div id="summary-items"></div>
+          <div class="summary-total">
+            <div class="summary-line"><span data-i18n="subtotal">Sous-total</span><span id="summary-subtotal">—</span></div>
+            <div class="summary-line" id="summary-promo-line" style="display:none;color:var(--success)"><span>Code promo</span><span id="summary-promo-amount">—</span></div>
+            <div class="summary-line"><span data-i18n="shipping">Livraison</span><span id="summary-shipping" data-i18n="free_shipping">Gratuite</span></div>
+            <div class="summary-line" style="font-size:1.1rem;font-weight:600;padding-top:0.5rem">
+              <span data-i18n="total">Total</span>
+              <span id="summary-total" style="color:var(--gold)">—</span>
+            </div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem" id="summary-dz">—</div>
+          </div>
+        </div>
+
+        <!-- Security badges -->
+        <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+          <div style="font-size:0.72rem;color:var(--text-dim);display:flex;align-items:center;gap:0.3rem">🔒 SSL Sécurisé</div>
+          <div style="font-size:0.72rem;color:var(--text-dim);display:flex;align-items:center;gap:0.3rem">↩️ Retours 14j</div>
+          <div style="font-size:0.72rem;color:var(--text-dim);display:flex;align-items:center;gap:0.3rem">⭐ Qualité garantie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal" style="max-width:480px;text-align:center">
+    <div style="padding:3rem 2rem">
+      <div style="font-size:3rem;margin-bottom:1rem">🎉</div>
+      <h2 style="font-family:var(--font-display);font-size:1.8rem;margin-bottom:0.75rem">Commande Confirmée !</h2>
+      <p style="color:var(--text-muted);margin-bottom:0.5rem" id="success-id"></p>
+      <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:2rem" data-i18n="order_success">Vous recevrez un email de confirmation.</p>
+      <a href="index.html" class="btn btn-primary">Retour à la boutique</a>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cart.js"></script>
+<script>
+  // Config - MODIFIER AVEC VOS INFOS
+  const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/REMPLACER_VOTRE_LIEN";
+  const FORMSPREE_ID = "REMPLACER_VOTRE_ID";
+
+  let promoApplied = null;
+
+  function renderSummary() {
+    const cart = getCart();
+    const subtotal = getCartTotal();
+    const discount = promoApplied ? promoApplied.discountAmount : 0;
+    const total = Math.max(0, subtotal - discount);
+    const totalDZ = Math.round(total * 145);
+
+    document.getElementById('summary-items').innerHTML = cart.map(item => `
+      <div class="summary-line">
+        <span style="font-size:0.85rem">${item.name[currentLang]||item.name.fr} <span style="color:var(--text-muted)">×${item.qty}</span></span>
+        <span style="font-size:0.85rem">${formatPrice(item.price * item.qty)}</span>
+      </div>`).join('');
+
+    document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
+    document.getElementById('summary-total').textContent = formatPrice(total);
+    document.getElementById('summary-dz').textContent = `≈ ${totalDZ.toLocaleString('fr-DZ')} DA`;
+
+    if (promoApplied) {
+      document.getElementById('summary-promo-line').style.display = 'flex';
+      document.getElementById('summary-promo-amount').textContent = '−' + formatPrice(discount);
+    }
+  }
+
+  function applyPromo() {
+    const code = document.getElementById('promo-input').value.trim();
+    const total = getCartTotal();
+    const result = validatePromo(code, total);
+    const msg = document.getElementById('promo-msg');
+    if (result) {
+      promoApplied = result;
+      msg.style.color = 'var(--success)';
+      msg.textContent = `✓ Code appliqué : −${formatPrice(result.discountAmount)}`;
+      renderSummary();
+    } else {
+      promoApplied = null;
+      msg.style.color = 'var(--danger)';
+      msg.textContent = '✕ Code invalide ou expiré';
+    }
+  }
+
+  function selectPayment(method) {
+    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+  }
+
+  function getFormData() {
+    return {
+      name: document.getElementById('f-name').value,
+      phone: document.getElementById('f-phone').value,
+      email: document.getElementById('f-email').value,
+      address: document.getElementById('f-address').value,
+      wilaya: document.getElementById('f-wilaya').value,
+      city: document.getElementById('f-city').value,
+      notes: document.getElementById('f-notes').value,
+    };
+  }
+
+  function validateForm() {
+    const d = getFormData();
+    if (!d.name || !d.phone || !d.address || !d.wilaya) {
+      showToast('Veuillez remplir tous les champs obligatoires', 'error');
+      return false;
+    }
+    if (getCart().length === 0) {
+      showToast('Votre panier est vide', 'error');
+      return false;
+    }
+    return true;
+  }
+
+  function payStripe() {
+    if (!validateForm()) return;
+    // Build cart summary to pass to Stripe (for reference)
+    const total = getCartTotal() - (promoApplied?.discountAmount || 0);
+    window.location.href = STRIPE_PAYMENT_LINK;
+  }
+
+  async function submitDZD(method) {
+    if (!validateForm()) return;
+    const form = getFormData();
+    const cart = getCart();
+    const subtotal = getCartTotal();
+    const discount = promoApplied?.discountAmount || 0;
+    const total = subtotal - discount;
+
+    const orderData = {
+      ...form,
+      method,
+      items: cart.map(i => `${i.name.fr} ×${i.qty} = ${formatPrice(i.price * i.qty)}`).join('\n'),
+      subtotal: formatPrice(subtotal),
+      discount: discount ? formatPrice(discount) : 'Aucun',
+      total_eur: formatPrice(total),
+      total_dzd: `${Math.round(total * 145).toLocaleString()} DA`,
+      date: new Date().toLocaleString('fr-DZ')
+    };
+
+    // Save order locally
+    const order = saveOrder({ ...orderData, cart });
+    
+    // Send via Formspree
+    if (FORMSPREE_ID !== 'REMPLACER_VOTRE_ID') {
+      try {
+        await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subject: `Nouvelle commande ${order.id}`, ...orderData })
+        });
+      } catch(e) { console.log('Formspree error', e); }
+    }
+
+    clearCart();
+    document.getElementById('success-id').textContent = `Commande N° ${order.id}`;
+    document.getElementById('success-modal').classList.add('open');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (getCart().length === 0 && !window.location.hash) {
+      // Allow empty for demo
+    }
+    renderSummary();
+    document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => { setLang(b.dataset.lang); renderSummary(); }));
+  });
+</script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>

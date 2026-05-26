@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma Boutique — Artisanat & Produits Algériens</title>
+  <meta name="description" content="Découvrez notre sélection de produits artisanaux algériens authentiques. Livraison partout en Algérie.">
+  <meta property="og:title" content="Ma Boutique — Artisanat Algérien">
+  <meta property="og:description" content="Produits artisanaux algériens authentiques">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<!-- Promo Banner -->
+<div class="promo-banner">
+  <span data-i18n="promo_text">🎁 Livraison gratuite à partir de 50€ | Code: BIENVENUE10 pour -10%</span>
+  <button class="close-banner" aria-label="Fermer">✕</button>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Ma<span>Boutique</span></a>
+    <nav class="nav-links">
+      <a href="index.html" class="active" data-i18n="nav_home">Accueil</a>
+      <a href="shop.html" data-i18n="nav_shop">Boutique</a>
+      <a href="about.html" data-i18n="nav_about">À propos</a>
+      <a href="contact.html" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="ar">ع</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button class="cart-btn" aria-label="Panier">
+        🛍 <span class="cart-count">0</span>
+      </button>
+      <button class="menu-btn" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav">
+  <button class="mobile-close">✕</button>
+  <nav class="mobile-nav-links">
+    <a href="index.html" data-i18n="nav_home">Accueil</a>
+    <a href="shop.html" data-i18n="nav_shop">Boutique</a>
+    <a href="about.html" data-i18n="nav_about">À propos</a>
+    <a href="contact.html" data-i18n="nav_contact">Contact</a>
+  </nav>
+  <div class="lang-switcher" style="margin-top:2rem">
+    <button class="lang-btn" data-lang="fr">FR</button>
+    <button class="lang-btn" data-lang="ar">ع</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</div>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay"></div>
+
+<!-- Cart Sidebar -->
+<aside class="cart-sidebar">
+  <div class="cart-header">
+    <h2 class="cart-title" data-i18n="cart_title">Panier</h2>
+    <button class="cart-close">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span data-i18n="cart_total">Total</span>
+      <span class="cart-total-amount" id="cart-total-amount">0,00 €</span>
+    </div>
+    <a href="checkout.html" class="btn btn-primary btn-full" data-i18n="btn_checkout">Passer la commande</a>
+  </div>
+</aside>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Artisanat Algérien Authentique</div>
+    <h1>L'art de chez nous,<br><em>livré chez vous</em></h1>
+    <p>Découvrez des créations uniques faites à la main par des artisans algériens. Qualité, authenticité et tradition.</p>
+    <div class="hero-ctas">
+      <a href="shop.html" class="btn btn-primary" data-i18n="nav_shop">Découvrir la boutique</a>
+      <a href="about.html" class="btn btn-outline" data-i18n="nav_about">Notre histoire</a>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">✦ Sélection</div>
+      <h2 class="section-title">Produits phares</h2>
+      <p class="section-subtitle">Une sélection de nos meilleures créations artisanales</p>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Tous</button>
+      <button class="filter-btn" data-filter="nouveau" data-i18n="filter_new">Nouveautés</button>
+      <button class="filter-btn" data-filter="promo" data-i18n="filter_promo">Promotions</button>
+    </div>
+    <div style="margin-bottom:1.5rem">
+      <div style="display:flex;align-items:center;gap:0.5rem;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.5rem 1rem;max-width:300px">
+        <span style="color:var(--text-dim)">🔍</span>
+        <input id="search-input" type="text" placeholder="Rechercher un produit..." style="background:none;border:none;color:var(--text);font-size:0.88rem;outline:none;width:100%" data-i18n-attr="placeholder:nav_shop">
+      </div>
+    </div>
+    <div class="products-grid" id="products-grid"></div>
+  </div>
+</section>
+
+<!-- Why Us -->
+<section class="section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="section-inner">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem">
+      <div style="text-align:center;padding:1rem">
+        <div style="font-size:2rem;margin-bottom:1rem">🤝</div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:0.5rem">Artisans Locaux</h3>
+        <p style="color:var(--text-muted);font-size:0.88rem">Chaque produit est fabriqué à la main par des artisans algériens passionnés</p>
+      </div>
+      <div style="text-align:center;padding:1rem">
+        <div style="font-size:2rem;margin-bottom:1rem">🚚</div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:0.5rem">Livraison Rapide</h3>
+        <p style="color:var(--text-muted);font-size:0.88rem">Livraison partout en Algérie en 3 à 5 jours ouvrables</p>
+      </div>
+      <div style="text-align:center;padding:1rem">
+        <div style="font-size:2rem;margin-bottom:1rem">💳</div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:0.5rem">Paiement Flexible</h3>
+        <p style="color:var(--text-muted);font-size:0.88rem">En ligne en euros ou en dinars. Paiement à la livraison disponible</p>
+      </div>
+      <div style="text-align:center;padding:1rem">
+        <div style="font-size:2rem;margin-bottom:1rem">↩️</div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:0.5rem">Retours 14 jours</h3>
+        <p style="color:var(--text-muted);font-size:0.88rem">Satisfait ou remboursé sous 14 jours, sans conditions</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">Ma<span>Boutique</span></a>
+      <p style="margin-top:1rem">Votre boutique d'artisanat algérien authentique. Des créations uniques, faites avec passion.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Boutique</h4>
+      <ul>
+        <li><a href="shop.html">Tous les produits</a></li>
+        <li><a href="shop.html?filter=nouveau">Nouveautés</a></li>
+        <li><a href="shop.html?filter=promo">Promotions</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Informations</h4>
+      <ul>
+        <li><a href="about.html">À propos</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="#">Livraison</a></li>
+        <li><a href="#">Retours</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:contact@maboutique.dz">contact@maboutique.dz</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 MaBoutique. Tous droits réservés.</span>
+    <span>Fait avec ❤️ en Algérie</span>
+  </div>
+</footer>
+
+<!-- Chatbot -->
+<button class="chatbot-toggle" id="chatbot-toggle" aria-label="Chat">💬</button>
+<div class="chatbot-window" id="chatbot-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🛍</div>
+    <div>
+      <div class="chat-title">Assistant Boutique</div>
+      <div class="chat-status">● En ligne</div>
+    </div>
+    <button class="chat-close-btn" id="chat-close">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-quick-btns" id="chat-quick-btns"></div>
+  <div class="chat-input-area">
+    <input class="chat-input" id="chat-input" type="text" placeholder="Écrire un message..." data-i18n="chat_placeholder">
+    <button class="chat-send" id="chat-send">➤</button>
+  </div>
+</div>
+
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>

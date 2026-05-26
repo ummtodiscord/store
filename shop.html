@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique — MaBoutique</title>
+  <meta name="description" content="Tous nos produits artisanaux algériens. Filtrez par catégorie, prix ou nouveauté.">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    .shop-layout { display: grid; grid-template-columns: 240px 1fr; gap: 2rem; }
+    .shop-sidebar { position: sticky; top: 90px; height: fit-content; }
+    .sidebar-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+    .sidebar-panel h4 { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .price-range { display: flex; flex-direction: column; gap: 0.5rem; }
+    .price-range input[type="range"] { width: 100%; accent-color: var(--gold); }
+    .price-display { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); }
+    .cat-filter { display: flex; flex-direction: column; gap: 0.4rem; }
+    .cat-item { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem; color: var(--text-muted); padding: 0.3rem 0; transition: color 0.2s; }
+    .cat-item:hover, .cat-item.active { color: var(--gold); }
+    .cat-item input { accent-color: var(--gold); }
+    .sort-select { background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 0.75rem; border-radius: var(--radius); font-size: 0.85rem; width: 100%; outline: none; }
+    .shop-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+    .result-count { font-size: 0.82rem; color: var(--text-muted); }
+    @media (max-width: 768px) { .shop-layout { grid-template-columns: 1fr; } .shop-sidebar { position: static; } }
+  </style>
+</head>
+<body>
+
+<!-- Promo Banner -->
+<div class="promo-banner">
+  <span data-i18n="promo_text">🎁 Livraison gratuite à partir de 50€ | Code: BIENVENUE10 pour -10%</span>
+  <button class="close-banner">✕</button>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Ma<span>Boutique</span></a>
+    <nav class="nav-links">
+      <a href="index.html" data-i18n="nav_home">Accueil</a>
+      <a href="shop.html" class="active" data-i18n="nav_shop">Boutique</a>
+      <a href="about.html" data-i18n="nav_about">À propos</a>
+      <a href="contact.html" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="ar">ع</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button class="cart-btn">🛍 <span class="cart-count">0</span></button>
+      <button class="menu-btn">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav">
+  <button class="mobile-close">✕</button>
+  <nav class="mobile-nav-links">
+    <a href="index.html" data-i18n="nav_home">Accueil</a>
+    <a href="shop.html" data-i18n="nav_shop">Boutique</a>
+    <a href="about.html" data-i18n="nav_about">À propos</a>
+    <a href="contact.html" data-i18n="nav_contact">Contact</a>
+  </nav>
+  <div class="lang-switcher" style="margin-top:2rem">
+    <button class="lang-btn" data-lang="fr">FR</button>
+    <button class="lang-btn" data-lang="ar">ع</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</div>
+
+<!-- Cart -->
+<div class="cart-overlay"></div>
+<aside class="cart-sidebar">
+  <div class="cart-header">
+    <h2 class="cart-title" data-i18n="cart_title">Panier</h2>
+    <button class="cart-close">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span data-i18n="cart_total">Total</span>
+      <span class="cart-total-amount" id="cart-total-amount">0,00 €</span>
+    </div>
+    <a href="checkout.html" class="btn btn-primary btn-full" data-i18n="btn_checkout">Passer la commande</a>
+  </div>
+</aside>
+
+<!-- Page Hero -->
+<div style="background:var(--bg2);border-bottom:1px solid var(--border);padding:3rem 2rem 2rem">
+  <div style="max-width:1400px;margin:0 auto">
+    <div style="font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem">✦ Catalogue</div>
+    <h1 style="font-family:var(--font-display);font-size:2.2rem;font-weight:300" data-i18n="nav_shop">Boutique</h1>
+  </div>
+</div>
+
+<!-- Shop Layout -->
+<section class="section">
+  <div class="section-inner">
+    <div class="shop-layout">
+
+      <!-- Sidebar Filters -->
+      <aside class="shop-sidebar">
+        <!-- Search -->
+        <div class="sidebar-panel">
+          <h4>Recherche</h4>
+          <div style="display:flex;align-items:center;gap:0.5rem;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:0.5rem 0.75rem">
+            <span style="color:var(--text-dim)">🔍</span>
+            <input id="search-input" type="text" placeholder="Rechercher..." style="background:none;border:none;color:var(--text);font-size:0.85rem;outline:none;width:100%">
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="sidebar-panel">
+          <h4>Catégories</h4>
+          <div class="cat-filter" id="cat-filters">
+            <label class="cat-item active" data-cat="all">
+              <input type="radio" name="cat" value="all" checked> Toutes
+            </label>
+          </div>
+        </div>
+
+        <!-- Price Range -->
+        <div class="sidebar-panel">
+          <h4>Prix</h4>
+          <div class="price-range">
+            <input type="range" id="price-max" min="0" max="500" value="500" oninput="updatePriceFilter()">
+            <div class="price-display">
+              <span>0 €</span>
+              <span id="price-max-val">500 €</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sort -->
+        <div class="sidebar-panel">
+          <h4>Trier par</h4>
+          <select class="sort-select" id="sort-select" onchange="renderProducts()">
+            <option value="default">Par défaut</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+            <option value="new">Nouveautés</option>
+            <option value="promo">Promotions</option>
+          </select>
+        </div>
+
+        <!-- Quick Filters -->
+        <div class="sidebar-panel">
+          <h4>Filtres rapides</h4>
+          <div style="display:flex;flex-direction:column;gap:0.4rem">
+            <label class="cat-item"><input type="checkbox" id="f-promo" onchange="renderProducts()"> En promotion</label>
+            <label class="cat-item"><input type="checkbox" id="f-new" onchange="renderProducts()"> Nouveautés</label>
+            <label class="cat-item"><input type="checkbox" id="f-instock" onchange="renderProducts()"> En stock</label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Products Area -->
+      <div>
+        <div class="shop-toolbar">
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Tous</button>
+            <button class="filter-btn" data-filter="nouveau" data-i18n="filter_new">Nouveautés</button>
+            <button class="filter-btn" data-filter="promo" data-i18n="filter_promo">Promotions</button>
+          </div>
+          <span class="result-count" id="result-count">0 produits</span>
+        </div>
+        <div class="products-grid" id="products-grid"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">Ma<span>Boutique</span></a>
+      <p style="margin-top:1rem">Artisanat algérien authentique. Qualité, tradition et passion.</p>
+    </div>
+    <div class="footer-col"><h4>Boutique</h4><ul>
+      <li><a href="shop.html">Tous les produits</a></li>
+      <li><a href="shop.html?filter=nouveau">Nouveautés</a></li>
+      <li><a href="shop.html?filter=promo">Promotions</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Info</h4><ul>
+      <li><a href="about.html">À propos</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul>
+      <li><a href="mailto:contact@maboutique.dz">contact@maboutique.dz</a></li>
+      <li><a href="#">WhatsApp</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 MaBoutique</span>
+    <span>Fait avec ❤️ en Algérie</span>
+  </div>
+</footer>
+
+<!-- Chatbot -->
+<button class="chatbot-toggle" id="chatbot-toggle">💬</button>
+<div class="chatbot-window" id="chatbot-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🛍</div>
+    <div><div class="chat-title">Assistant Boutique</div><div class="chat-status">● En ligne</div></div>
+    <button class="chat-close-btn" id="chat-close">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-quick-btns" id="chat-quick-btns"></div>
+  <div class="chat-input-area">
+    <input class="chat-input" id="chat-input" type="text" placeholder="Écrire un message...">
+    <button class="chat-send" id="chat-send">➤</button>
+  </div>
+</div>
+
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/chatbot.js"></script>
+<script>
+  let selectedCat = 'all';
+  let maxPrice = 500;
+
+  // Build category filters
+  function buildCatFilters() {
+    const cats = getCategories();
+    const container = document.getElementById('cat-filters');
+    cats.forEach(cat => {
+      const label = document.createElement('label');
+      label.className = 'cat-item';
+      label.dataset.cat = cat;
+      label.innerHTML = `<input type="radio" name="cat" value="${cat}"> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
+      label.addEventListener('click', () => {
+        document.querySelectorAll('.cat-item').forEach(l => l.classList.remove('active'));
+        label.classList.add('active');
+        selectedCat = cat;
+        renderProducts();
+      });
+      container.appendChild(label);
+    });
+    document.querySelector('.cat-item[data-cat="all"]').addEventListener('click', () => {
+      selectedCat = 'all'; renderProducts();
+    });
+  }
+
+  function updatePriceFilter() {
+    maxPrice = parseInt(document.getElementById('price-max').value);
+    document.getElementById('price-max-val').textContent = maxPrice + ' €';
+    renderProducts();
+  }
+
+  // Override renderProducts to add shop-specific filters
+  const _origRender = renderProducts;
+  window.renderProducts = function(filter) {
+    if (filter) activeFilter = filter;
+    const grid = document.getElementById('products-grid');
+    if (!grid) return;
+
+    const sort = document.getElementById('sort-select')?.value || 'default';
+    const onlyPromo = document.getElementById('f-promo')?.checked;
+    const onlyNew = document.getElementById('f-new')?.checked;
+    const onlyInStock = document.getElementById('f-instock')?.checked;
+
+    let products = getProducts().filter(p => p.active);
+
+    // Category
+    if (selectedCat !== 'all') products = products.filter(p => p.category === selectedCat);
+    // Quick filters
+    if (activeFilter === 'promo') products = products.filter(p => p.promo);
+    if (activeFilter === 'nouveau') products = products.filter(p => p.tags?.includes('nouveau'));
+    if (onlyPromo) products = products.filter(p => p.promo);
+    if (onlyNew) products = products.filter(p => p.tags?.includes('nouveau'));
+    if (onlyInStock) products = products.filter(p => p.stock > 0);
+    // Price
+    products = products.filter(p => p.price <= maxPrice);
+    // Search
+    if (searchQuery) products = products.filter(p => (p.name[currentLang]||p.name.fr).toLowerCase().includes(searchQuery.toLowerCase()));
+    // Sort
+    if (sort === 'price-asc') products.sort((a,b) => a.price - b.price);
+    if (sort === 'price-desc') products.sort((a,b) => b.price - a.price);
+    if (sort === 'new') products = products.filter(p => p.tags?.includes('nouveau')).concat(products.filter(p => !p.tags?.includes('nouveau')));
+    if (sort === 'promo') products = products.filter(p => p.promo).concat(products.filter(p => !p.promo));
+
+    document.getElementById('result-count').textContent = products.length + ' produit' + (products.length > 1 ? 's' : '');
+
+    if (products.length === 0) {
+      grid.innerHTML = `<p style="color:var(--text-muted);padding:3rem;grid-column:1/-1;text-align:center">Aucun produit trouvé.</p>`;
+      return;
+    }
+    grid.innerHTML = products.map(p => productCard(p)).join('');
+  };
+
+  // Handle URL params
+  document.addEventListener('DOMContentLoaded', () => {
+    buildCatFilters();
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get('filter');
+    if (filter) {
+      activeFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+    }
+    renderProducts();
+  });
+</script>
+</body>
+</html>

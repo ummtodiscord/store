@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produit — MaBoutique</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    .product-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1100px; margin: 0 auto; }
+    .gallery { position: sticky; top: 90px; }
+    .gallery-main { aspect-ratio: 1; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg3); margin-bottom: 0.75rem; }
+    .gallery-main img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .gallery-main:hover img { transform: scale(1.04); }
+    .gallery-thumbs { display: flex; gap: 0.5rem; }
+    .gallery-thumb { width: 70px; height: 70px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color 0.2s; flex-shrink: 0; }
+    .gallery-thumb.active { border-color: var(--gold); }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .product-info-panel { padding-top: 0.5rem; }
+    .product-detail-name { font-family: var(--font-display); font-size: 2.2rem; font-weight: 300; line-height: 1.2; margin-bottom: 1rem; }
+    .product-detail-price { font-size: 1.8rem; font-weight: 600; color: var(--gold); margin-bottom: 0.4rem; }
+    .product-detail-price-dzd { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .qty-selector { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .qty-selector label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+    .qty-control { display: flex; align-items: center; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .qty-control button { background: var(--bg3); border: none; color: var(--text); width: 36px; height: 36px; font-size: 1rem; transition: all 0.2s; }
+    .qty-control button:hover { background: var(--gold-dim); color: var(--gold); }
+    .qty-control input { background: transparent; border: none; border-left: 1px solid var(--border); border-right: 1px solid var(--border); color: var(--text); width: 50px; text-align: center; font-size: 0.9rem; padding: 0.4rem; outline: none; }
+    .product-ctas { display: flex; gap: 0.75rem; margin-bottom: 2rem; }
+    .product-meta-list { display: flex; flex-direction: column; gap: 0.6rem; padding: 1.25rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .meta-item { display: flex; gap: 1rem; font-size: 0.85rem; }
+    .meta-key { color: var(--text-muted); min-width: 100px; }
+    .related-section { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border); }
+    @media (max-width: 768px) { .product-detail { grid-template-columns: 1fr; gap: 2rem; } .gallery { position: static; } }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Ma<span>Boutique</span></a>
+    <nav class="nav-links">
+      <a href="index.html" data-i18n="nav_home">Accueil</a>
+      <a href="shop.html" class="active" data-i18n="nav_shop">Boutique</a>
+      <a href="about.html" data-i18n="nav_about">À propos</a>
+      <a href="contact.html" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="ar">ع</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button class="cart-btn">🛍 <span class="cart-count">0</span></button>
+      <button class="menu-btn">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav">
+  <button class="mobile-close">✕</button>
+  <nav class="mobile-nav-links">
+    <a href="index.html" data-i18n="nav_home">Accueil</a>
+    <a href="shop.html" data-i18n="nav_shop">Boutique</a>
+    <a href="about.html" data-i18n="nav_about">À propos</a>
+    <a href="contact.html" data-i18n="nav_contact">Contact</a>
+  </nav>
+</div>
+
+<div class="cart-overlay"></div>
+<aside class="cart-sidebar">
+  <div class="cart-header">
+    <h2 class="cart-title" data-i18n="cart_title">Panier</h2>
+    <button class="cart-close">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span data-i18n="cart_total">Total</span>
+      <span class="cart-total-amount" id="cart-total-amount">0,00 €</span>
+    </div>
+    <a href="checkout.html" class="btn btn-primary btn-full" data-i18n="btn_checkout">Passer la commande</a>
+  </div>
+</aside>
+
+<!-- Breadcrumb -->
+<div style="background:var(--bg2);border-bottom:1px solid var(--border);padding:0.75rem 2rem">
+  <div style="max-width:1400px;margin:0 auto;font-size:0.78rem;color:var(--text-muted)">
+    <a href="index.html" style="color:var(--text-dim)">Accueil</a> /
+    <a href="shop.html" style="color:var(--text-dim)">Boutique</a> /
+    <span id="breadcrumb-name" style="color:var(--text-muted)">Produit</span>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="product-detail" id="product-detail">
+      <div style="text-align:center;padding:4rem;color:var(--text-muted);grid-column:1/-1">Chargement...</div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="related-section">
+      <div class="section-label">✦ Suggestions</div>
+      <h2 class="section-title" style="margin-bottom:1.5rem">Vous aimerez aussi</h2>
+      <div class="products-grid" id="related-grid"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">Ma<span>Boutique</span></a>
+      <p style="margin-top:1rem">Artisanat algérien authentique.</p>
+    </div>
+    <div class="footer-col"><h4>Boutique</h4><ul><li><a href="shop.html">Tous les produits</a></li></ul></div>
+    <div class="footer-col"><h4>Info</h4><ul><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:contact@maboutique.dz">contact@maboutique.dz</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2024 MaBoutique</span><span>Fait avec ❤️ en Algérie</span></div>
+</footer>
+
+<button class="chatbot-toggle" id="chatbot-toggle">💬</button>
+<div class="chatbot-window" id="chatbot-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🛍</div>
+    <div><div class="chat-title">Assistant Boutique</div><div class="chat-status">● En ligne</div></div>
+    <button class="chat-close-btn" id="chat-close">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-quick-btns" id="chat-quick-btns"></div>
+  <div class="chat-input-area">
+    <input class="chat-input" id="chat-input" type="text" placeholder="Écrire un message...">
+    <button class="chat-send" id="chat-send">➤</button>
+  </div>
+</div>
+
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/chatbot.js"></script>
+<script>
+  let currentProduct = null;
+  let selectedQty = 1;
+
+  function loadProduct() {
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get('id'));
+    const product = getProductById(id);
+
+    if (!product) {
+      document.getElementById('product-detail').innerHTML = `<div style="text-align:center;padding:4rem;grid-column:1/-1"><p style="color:var(--text-muted)">Produit introuvable.</p><a href="shop.html" class="btn btn-outline" style="margin-top:1rem">← Retour boutique</a></div>`;
+      return;
+    }
+    currentProduct = product;
+    document.title = (product.name[currentLang] || product.name.fr) + ' — MaBoutique';
+    document.getElementById('breadcrumb-name').textContent = product.name[currentLang] || product.name.fr;
+    renderProduct(product);
+    renderRelated(product);
+  }
+
+  function renderProduct(p) {
+    const name = p.name[currentLang] || p.name.fr;
+    const desc = p.description?.[currentLang] || p.description?.fr || '';
+    const priceDzd = Math.round(p.price * 145).toLocaleString('fr-DZ');
+    const priceOld = p.price_old ? `<span style="font-size:1rem;text-decoration:line-through;color:var(--text-dim)">${p.price_old.toFixed(2)} €</span>` : '';
+    const badge = p.promo ? `<span style="background:var(--danger);color:#fff;font-size:0.72rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:2px;letter-spacing:0.05em">-${p.promo_pct}%</span>` : p.tags?.includes('nouveau') ? `<span style="background:var(--gold);color:#000;font-size:0.72rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:2px;">NOUVEAU</span>` : '';
+    const stockText = p.stock === 0 ? `<span style="color:var(--danger)">✕ Rupture de stock</span>` : p.stock <= 3 ? `<span style="color:var(--warning)">⚠ Plus que ${p.stock} en stock</span>` : `<span style="color:var(--success)">✓ En stock</span>`;
+    const images = p.images?.length ? p.images : ['https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&q=80'];
+
+    document.getElementById('product-detail').innerHTML = `
+      <!-- Gallery -->
+      <div class="gallery">
+        <div class="gallery-main">
+          <img id="main-img" src="${images[0]}" alt="${name}" onerror="this.src='https://via.placeholder.com/500'">
+        </div>
+        ${images.length > 1 ? `<div class="gallery-thumbs">
+          ${images.map((img, i) => `<div class="gallery-thumb ${i===0?'active':''}" onclick="switchImage(${i},'${img}')"><img src="${img}" onerror="this.src='https://via.placeholder.com/70'"></div>`).join('')}
+        </div>` : ''}
+      </div>
+
+      <!-- Info -->
+      <div class="product-info-panel">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
+          <span style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim)">${p.category}</span>
+          ${badge}
+        </div>
+        <h1 class="product-detail-name">${name}</h1>
+        <div class="product-detail-price">${p.price.toFixed(2)} € ${priceOld}</div>
+        <div class="product-detail-price-dzd">≈ ${priceDzd} DA</div>
+
+        <div style="font-size:0.9rem;color:var(--text-muted);line-height:1.8;margin-bottom:1.75rem">${desc}</div>
+
+        ${p.stock > 0 ? `
+        <div class="qty-selector">
+          <label>Quantité</label>
+          <div class="qty-control">
+            <button onclick="changeQty(-1)">−</button>
+            <input type="number" id="qty-input" value="1" min="1" max="${p.stock}" onchange="selectedQty=parseInt(this.value)">
+            <button onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+        <div class="product-ctas">
+          <button class="btn btn-primary" style="flex:1" onclick="addToCart(${p.id}, selectedQty)">🛍 ${currentLang==='ar'?'أضف للسلة':currentLang==='en'?'Add to cart':'Ajouter au panier'}</button>
+          <a href="checkout.html" class="btn btn-outline" onclick="addToCart(${p.id}, selectedQty)">⚡ Commander</a>
+        </div>` : `<div class="btn btn-outline" style="opacity:0.5;cursor:not-allowed;text-align:center;padding:0.75rem;margin-bottom:1.5rem">Rupture de stock</div>`}
+
+        <div class="product-meta-list">
+          <div class="meta-item"><span class="meta-key">Référence</span><span>REF-${p.id.toString().padStart(4,'0')}</span></div>
+          <div class="meta-item"><span class="meta-key">Catégorie</span><span>${p.category}</span></div>
+          <div class="meta-item"><span class="meta-key">Disponibilité</span>${stockText}</div>
+          ${p.tags?.length ? `<div class="meta-item"><span class="meta-key">Tags</span><span style="display:flex;gap:0.4rem;flex-wrap:wrap">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</span></div>` : ''}
+        </div>
+
+        <!-- Reassurance -->
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.82rem;color:var(--text-muted)">🔒 Paiement 100% sécurisé</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.82rem;color:var(--text-muted)">🚚 Livraison en 3-5 jours</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.82rem;color:var(--text-muted)">↩️ Retours gratuits 14 jours</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.82rem;color:var(--text-muted)">🤝 Artisan garanti authentique</div>
+        </div>
+      </div>`;
+  }
+
+  function switchImage(i, src) {
+    document.getElementById('main-img').src = src;
+    document.querySelectorAll('.gallery-thumb').forEach((t, idx) => t.classList.toggle('active', idx === i));
+  }
+
+  function changeQty(delta) {
+    const input = document.getElementById('qty-input');
+    if (!input) return;
+    const max = currentProduct?.stock || 99;
+    selectedQty = Math.max(1, Math.min(selectedQty + delta, max));
+    input.value = selectedQty;
+  }
+
+  function renderRelated(current) {
+    const all = getProducts().filter(p => p.active && p.id !== current.id && p.category === current.category).slice(0, 3);
+    const fallback = all.length < 3 ? getProducts().filter(p => p.active && p.id !== current.id && !all.find(a => a.id === p.id)).slice(0, 3 - all.length) : [];
+    const related = [...all, ...fallback].slice(0, 3);
+    document.getElementById('related-grid').innerHTML = related.map(p => productCard(p)).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', loadProduct);
+</script>
+</body>
+</html>
